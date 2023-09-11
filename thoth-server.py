@@ -35,7 +35,7 @@ def parse_and_write_file(json_data):
       filename_hash = hashlib.md5(data['url'].encode('utf-8')).hexdigest()
 
       filename = "{hour}_{minute}_{second}_{site}_{filename_hash}.json".format(site=site, timestamp=data['timestamp'], filename_hash=filename_hash, hour=timestamp.hour, minute=timestamp.minute, second=timestamp.second)
-      path = "./data/{year}/{month}/{day}/".format(year=timestamp.year, month=timestamp.month, day=timestamp.day)
+      path = "/data/{year}/{month}/{day}/".format(year=timestamp.year, month=timestamp.month, day=timestamp.day)
     except Exception as e:
       print("Internal Server Error")
       return {"error":True,"message":"Internal Server Error: {}".format(e.message)}
