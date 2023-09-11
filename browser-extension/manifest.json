@@ -1,0 +1,27 @@
+{
+    "page_action": {},
+    "background": {
+        "scripts": ["scripts/background.js"]
+    },
+    "content_scripts": [
+        {
+            "js": ["scripts/content.js"],
+            "matches": ["<all_urls>"],
+            "run_at": "document_start"
+        }
+    ],
+    "default_locale": "en",
+    "description": "__MSG_extension_description__",
+    "icons": {
+        "48": "icons/icon.png"
+    },
+    "manifest_version": 2,
+    "name": "__MSG_extension_name__",
+    "permissions": [
+        "alarms",
+        "storage",
+        "webNavigation"
+    ],
+    "version": "2.1"
+}
+

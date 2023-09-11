@@ -1,0 +1,10 @@
+{
+    "extension_description": {
+        "message": "Short Description",
+        "description": "A short description of the extension."
+    },
+    "extension_name": {
+        "message": "The Browser Extension",
+        "description": "Name of the extension. This is used to identify the extension."
+    }
+}
