@@ -16,7 +16,7 @@
         "48": "icons/icon.png"
     },
     "manifest_version": 2,
-    "name": "__MSG_extension_name__",
+    "name": "Thoth extension",
     "permissions": [
         "alarms",
         "storage",

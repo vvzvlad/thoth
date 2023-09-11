@@ -1,7 +1,7 @@
 {
     "onlyMainFrame": true,
     "maxHistoryURL": 100,
-    "sourceDevice": "mydevice",
-    "uploadURL": "http://127.0.0.1:8000",
+    "sourceDevice": "vvzvlad@mbp",
+    "uploadURL": "http://nebula.lc:8000",
     "useWorkaround": false
 }
