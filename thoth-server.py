@@ -3,10 +3,8 @@
 #
 #############################################################################
 # A server saving pages to disk and sending them to Meilisearch.
-# /usr/local/opt/python/bin/python3.9 -m pip install --
 #############################################################################
 #
-
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse
@@ -19,7 +17,6 @@ import base64
 
 MEILI_SERVER_URL = os.environ.get('MEILI_SERVER_URL')
 MEILI_AUTH_TOKEN = os.environ.get('MEILI_AUTH_TOKEN')
-
 
 def generate_hash(data, timestamp):
     m = hashlib.sha256()
