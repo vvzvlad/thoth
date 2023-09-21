@@ -2,7 +2,7 @@
 
 #
 #############################################################################
-# A server saving pages to disk
+# A server saving pages to disk and sending them to Meilisearch.
 # /usr/local/opt/python/bin/python3.9 -m pip install --
 #############################################################################
 #
@@ -14,6 +14,12 @@ from datetime import datetime
 import os
 import os.path
 import hashlib
+import requests
+import os
+
+MEILI_SERVER_URL = os.environ.get('MEILI_SERVER_URL', 'http://10.31.41.59:7700/indexes/thoth/documents')
+MEILI_AUTH_TOKEN = os.environ.get('MEILI_AUTH_TOKEN', 'Hurt3-Ointment-Gestate')
+
 
 def generate_hash(data, timestamp):
     m = hashlib.sha256()
@@ -21,6 +27,21 @@ def generate_hash(data, timestamp):
     m.update(timestamp.encode('utf-8'))
     hash_value = m.digest()
     return base64.b64encode(hash_value).decode('utf-8').replace('+', '-').replace('/', '_').strip('=')
+
+
+def send_to_meilisearch_server(json_data, url, auth_token):
+    headers = {
+        'Authorization': f'Bearer {auth_token}',
+        'Content-Type': 'application/json'
+    }
+    try:
+        response = requests.post(url, headers=headers, data=json_data)
+        if response.status_code == 200:
+            print(f"Data sent successfully to {url}")
+        else:
+            print(f"Failed to send data to {url}. Status code: {response.status_code}")
+    except Exception as e:
+        print(f"An error occurred while sending data to {url}: {e}")
 
 
 
@@ -52,6 +73,9 @@ def parse_and_write_file(json_data):
         data_str = json.dumps(data, sort_keys=True)
         new_id = generate_hash(data_str, timestamp)[:10]
         data['id'] = new_id
+
+    send_to_meilisearch_server(json_data, MEILI_SERVER_URL, MEILI_AUTH_TOKEN)
+
 
     if not os.path.exists(path):
       try:
