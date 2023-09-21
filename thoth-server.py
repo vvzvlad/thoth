@@ -15,6 +15,13 @@ import os
 import os.path
 import hashlib
 
+def generate_hash(data, timestamp):
+    m = hashlib.sha256()
+    m.update(data.encode('utf-8'))
+    m.update(timestamp.encode('utf-8'))
+    hash_value = m.digest()
+    return base64.b64encode(hash_value).decode('utf-8').replace('+', '-').replace('/', '_').strip('=')
+
 
 
 def parse_and_write_file(json_data):
@@ -39,6 +46,12 @@ def parse_and_write_file(json_data):
     except Exception as e:
       print("Internal Server Error")
       return {"error":True,"message":"Internal Server Error: {}".format(e.message)}
+
+    if 'id' not in data:
+        timestamp = data.get('timestamp', '')
+        data_str = json.dumps(data, sort_keys=True)
+        new_id = generate_hash(data_str, timestamp)[:10]
+        data['id'] = new_id
 
     if not os.path.exists(path):
       try:
