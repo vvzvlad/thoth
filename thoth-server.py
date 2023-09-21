@@ -61,11 +61,11 @@ def parse_and_write_file(json_data):
         return {"error": True, "message": f"Internal Server Error: {e}"}
 
     if 'id' not in data:
-        print(f"Generate id: {data['id']}")
         timestamp_str = data.get('timestamp', '')
         data_str = json.dumps(data, sort_keys=True)
         new_id = generate_hash(data_str, timestamp_str)
         data['id'] = new_id
+        print(f"Generate id: {new_id}")
 
     send_to_meilisearch_server(json_data, MEILI_SERVER_URL, MEILI_AUTH_TOKEN)
 
