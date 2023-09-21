@@ -80,6 +80,8 @@ def parse_and_write_file(json_data):
         data['id'] = new_id
         print(f"Generate id: {new_id}")
 
+    json_data = json.dumps(data, sort_keys=True, indent=4)
+
     send_to_meilisearch_server(json_data, MEILI_SERVER_URL, MEILI_AUTH_TOKEN)
 
     if not os.path.exists(path):
