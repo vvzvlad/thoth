@@ -5,4 +5,4 @@ COPY thoth-server.py ./
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["python", "thoth-server.py"]
+CMD ["python -u", "thoth-server.py"]
