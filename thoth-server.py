@@ -93,12 +93,12 @@ def parse_and_write_file(json_data):
 
     if not os.path.exists(f"{path}{filename}"):
         try:
-            with open(f"{path}{filename}", 'wb') as file:
-                data_len = file.write(json_data)
+            with open(f"{path}{filename}", 'w') as file:
+                file.write(json_data)
         except Exception as e:
             print(f"❌ Failed to write file: {e}")
             return {"error": True, "message": f"Not write file: {path}{filename}"}
-        print(f"✅ Data saved: page name: {data['page_name']}, url: {data['url']}, filename: {filename}, {data_len/1000} kbytes, time: {data['timestamp']}")
+        print(f"✅ Data saved: page name: {data['page_name']}, url: {data['url']}, filename: {filename}, time: {data['timestamp']}")
         return {"error": False, "message": "Data saved"}
     else:
         print(f"❌ File already exists: {data['page_name']}, url: {data['url']}, filename: {filename}, time: {data['timestamp']}")
