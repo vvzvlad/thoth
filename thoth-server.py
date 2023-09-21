@@ -60,13 +60,13 @@ def parse_and_write_file(json_data):
 
     try:
         timestamp = datetime.fromisoformat(data['timestamp'])
-        dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f%z")
-        dt = dt.astimezone(pytz.UTC)
-        timestamp_unix_time = int(dt.timestamp())
-        data['timestamp'] = timestamp_unix_time
     except:
         print("❌ Failed to parse timestamp")
         return {"error": True, "message": "Invalid timestamp, must be ISO8601: YYYY-MM-DDTHH:MM:SS.mmmmmm"}
+    dt = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f%z")
+    dt = dt.astimezone(pytz.UTC)
+    timestamp_unix_time = int(dt.timestamp())
+    data['timestamp'] = timestamp_unix_time
 
     try:
         site = data['url'].split('/')[2]
