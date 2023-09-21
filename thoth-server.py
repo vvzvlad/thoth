@@ -43,9 +43,11 @@ def send_to_meilisearch_server(json_data, url, auth_token):
     try:
         response = requests.post(url, headers=headers, data=json_data, timeout=10)
         status_code = response.status_code
-        print(f"{status_messages.get(status_code, f'Unknown Status: Received status code {status_code}')}, URL: {url}")
+        response_json = response.json()
+        print(f"{status_messages.get(status_code, f'🔴 Unknown Status: Received status code {status_code}')}, URL: {url}, Details: {response_json}")
     except Exception as e:
-        print(f"An error occurred while sending data to {url}: {e}")
+        print(f"🔴 An error occurred while sending data to {url}: {e}")
+
 
 
 
