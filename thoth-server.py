@@ -22,7 +22,7 @@ MEILI_AUTH_TOKEN = os.environ.get('MEILI_AUTH_TOKEN')
 def generate_hash(data, timestamp):
     m = hashlib.sha256()
     m.update(data.encode('utf-8'))
-    m.update(timestamp.encode('utf-8'))
+    m.update(str(timestamp).encode('utf-8'))
     hash_value = m.digest()
     return base64.b64encode(hash_value).decode('utf-8').replace('+', '-').replace('/', '_').strip('=')[:10]
 
