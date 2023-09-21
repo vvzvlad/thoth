@@ -28,27 +28,38 @@ def generate_hash(data, timestamp):
 
 def send_to_meilisearch_server(json_data, url, auth_token):
     headers = { 'Authorization': f'Bearer {auth_token}', 'Content-Type': 'application/json' }
+    status_messages = {
+        200: "✅ Ok: Data sent successfully",
+        201: "✅ Created: Resource has been created",
+        202: "✅ Accepted: Task added to queue",
+        204: "✅ No Content: Resource deleted or no content returned",
+        205: "✅ Reset Content: All resources have been deleted",
+        400: "❌ Bad Request: The request was unacceptable",
+        401: "❌ Unauthorized: No valid API key provided",
+        403: "❌ Forbidden: API key lacks permissions",
+        404: "❌ Not Found: The requested resource doesn't exist"
+    }
+
     try:
         response = requests.post(url, headers=headers, data=json_data, timeout=10)
-        if response.status_code == 200:
-            print(f"Data sent successfully to {url}")
-        else:
-            print(f"Failed to send data to {url}. Status code: {response.status_code}")
+        status_code = response.status_code
+        print(f"{status_messages.get(status_code, f'Unknown Status: Received status code {status_code}')}, URL: {url}")
     except Exception as e:
         print(f"An error occurred while sending data to {url}: {e}")
+
 
 
 def parse_and_write_file(json_data):
     try:
         data = json.loads(json_data)
     except:
-        print("Failed to parse JSON")
+        print("❌ Failed to parse JSON")
         return {"error": True, "message": "Invalid JSON"}
 
     try:
         timestamp = datetime.fromisoformat(data['timestamp'])
     except:
-        print("Failed to parse timestamp")
+        print("❌ Failed to parse timestamp")
         return {"error": True, "message": "Invalid timestamp, must be ISO8601: YYYY-MM-DDTHH:MM:SS.mmmmmm"}
 
     try:
@@ -57,7 +68,7 @@ def parse_and_write_file(json_data):
         filename = f"{timestamp.hour}_{timestamp.minute}_{timestamp.second}_{site}_{filename_hash}.json"
         path = f"/data/raw_data/{timestamp.year}/{timestamp.month}/{timestamp.day}/"
     except Exception as e:
-        print("Internal Server Error")
+        print("❌ Internal Server Error")
         return {"error": True, "message": f"Internal Server Error: {e}"}
 
     if 'id' not in data:
@@ -81,12 +92,12 @@ def parse_and_write_file(json_data):
             with open(f"{path}{filename}", 'wb') as file:
                 data_len = file.write(json_data)
         except Exception as e:
-            print(f"Failed to write file: {e}")
+            print(f"❌ Failed to write file: {e}")
             return {"error": True, "message": f"Not write file: {path}{filename}"}
-        print(f"Data saved: page name: {data['page_name']}, url: {data['url']}, filename: {filename}, {data_len/1000} kbytes, time: {data['timestamp']}")
+        print(f"✅ Data saved: page name: {data['page_name']}, url: {data['url']}, filename: {filename}, {data_len/1000} kbytes, time: {data['timestamp']}")
         return {"error": False, "message": "Data saved"}
     else:
-        print(f"File already exists: {data['page_name']}, url: {data['url']}, filename: {filename}, time: {data['timestamp']}")
+        print(f"❌ File already exists: {data['page_name']}, url: {data['url']}, filename: {filename}, time: {data['timestamp']}")
         return {"error": True, "message": f"File already exists: {path}{filename}"}
 
 
