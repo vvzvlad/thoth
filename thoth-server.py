@@ -16,6 +16,7 @@ import os.path
 import hashlib
 import requests
 import os
+import base64
 
 MEILI_SERVER_URL = os.environ.get('MEILI_SERVER_URL', 'http://10.31.41.59:7700/indexes/thoth/documents')
 MEILI_AUTH_TOKEN = os.environ.get('MEILI_AUTH_TOKEN', 'Hurt3-Ointment-Gestate')
@@ -26,7 +27,7 @@ def generate_hash(data, timestamp):
     m.update(data.encode('utf-8'))
     m.update(timestamp.encode('utf-8'))
     hash_value = m.digest()
-    return base64.b64encode(hash_value).decode('utf-8').replace('+', '-').replace('/', '_').strip('=')
+    return base64.b64encode(hash_value).decode('utf-8').replace('+', '-').replace('/', '_').strip('=')[:10]
 
 
 def send_to_meilisearch_server(json_data, url, auth_token):
